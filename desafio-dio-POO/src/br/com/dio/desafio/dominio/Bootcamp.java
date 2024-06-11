@@ -1,36 +1,18 @@
 package br.com.dio.desafio.dominio;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
-public class Dev {
+public class Bootcamp {
     private String nome;
-    private Set<Conteudo> conteudosInscritos = new LinkedHashSet<>();
-    private Set<Conteudo> conteudosConcluidos = new LinkedHashSet<>();
-
-    public void inscreverBootcamp(Bootcamp bootcamp){
-        this.conteudosInscritos.addAll(bootcamp.getConteudos());
-        bootcamp.getDevsInscritos().add(this);
-    }
-
-    public void progredir() {
-        Optional<Conteudo> conteudo = this.conteudosInscritos.stream().findFirst();
-        if(conteudo.isPresent()) {
-            this.conteudosConcluidos.add(conteudo.get());
-            this.conteudosInscritos.remove(conteudo.get());
-        } else {
-            System.err.println("Você não está matriculado em nenhum conteúdo!");
-        }
-    }
-
-    public double calcularTotalXp() {
-        Iterator<Conteudo> iterator = this.conteudosConcluidos.iterator();
-        double soma = 0;
-        while(iterator.hasNext()){
-            double next = iterator.next().calcularXp();
-            soma += next;
-        }
-        return soma;
-    }
+    private String descricao;
+    private final LocalDate dataInicial = LocalDate.now();
+    private final LocalDate dataFinal = dataInicial.plusDays(45);
+    private Set<Dev> devsInscritos = new HashSet<>();
+    private Set<Conteudo> conteudos = new LinkedHashSet<>();
 
 
     public String getNome() {
@@ -41,32 +23,48 @@ public class Dev {
         this.nome = nome;
     }
 
-    public Set<Conteudo> getConteudosInscritos() {
-        return conteudosInscritos;
+    public String getDescricao() {
+        return descricao;
     }
 
-    public void setConteudosInscritos(Set<Conteudo> conteudosInscritos) {
-        this.conteudosInscritos = conteudosInscritos;
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
     }
 
-    public Set<Conteudo> getConteudosConcluidos() {
-        return conteudosConcluidos;
+    public LocalDate getDataInicial() {
+        return dataInicial;
     }
 
-    public void setConteudosConcluidos(Set<Conteudo> conteudosConcluidos) {
-        this.conteudosConcluidos = conteudosConcluidos;
+    public LocalDate getDataFinal() {
+        return dataFinal;
+    }
+
+    public Set<Dev> getDevsInscritos() {
+        return devsInscritos;
+    }
+
+    public void setDevsInscritos(Set<Dev> devsInscritos) {
+        this.devsInscritos = devsInscritos;
+    }
+
+    public Set<Conteudo> getConteudos() {
+        return conteudos;
+    }
+
+    public void setConteudos(Set<Conteudo> conteudos) {
+        this.conteudos = conteudos;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Dev dev = (Dev) o;
-        return Objects.equals(nome, dev.nome) && Objects.equals(conteudosInscritos, dev.conteudosInscritos) && Objects.equals(conteudosConcluidos, dev.conteudosConcluidos);
+        Bootcamp bootcamp = (Bootcamp) o;
+        return Objects.equals(nome, bootcamp.nome) && Objects.equals(descricao, bootcamp.descricao) && Objects.equals(dataInicial, bootcamp.dataInicial) && Objects.equals(dataFinal, bootcamp.dataFinal) && Objects.equals(devsInscritos, bootcamp.devsInscritos) && Objects.equals(conteudos, bootcamp.conteudos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nome, conteudosInscritos, conteudosConcluidos);
+        return Objects.hash(nome, descricao, dataInicial, dataFinal, devsInscritos, conteudos);
     }
 }
